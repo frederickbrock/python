@@ -2685,6 +2685,8 @@ class Pubnub(PubnubCore):
 # Pubnub Twisted
 
 
+class Pubnub
+
 class PubnubTwisted(PubnubCoreAsync):
 
     def start(self):
@@ -2715,7 +2717,8 @@ class PubnubTwisted(PubnubCoreAsync):
         auth_key=None,
         ssl_on=False,
         origin='pubsub.pubnub.com',
-        uuid=None
+        uuid=None,
+        protocol_factory=None
     ):
         super(PubnubTwisted, self).__init__(
             publish_key=publish_key,
@@ -2726,11 +2729,13 @@ class PubnubTwisted(PubnubCoreAsync):
             ssl_on=ssl_on,
             origin=origin,
             uuid=uuid
+
         )
         self.headers = {}
         self.headers['User-Agent'] = ['Python-Twisted']
         self.headers['V'] = [self.version]
         self.pnsdk = 'PubNub-Python-' + 'Twisted' + '/' + self.version
+        self.protocol_factory = protocol_factory
 
     def _request(self, request, callback=None, error=None,
                  single=False, timeout=5, encoder_map=None):
