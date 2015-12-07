@@ -2718,7 +2718,7 @@ class PubnubTwisted(PubnubCoreAsync):
         ssl_on=False,
         origin='pubsub.pubnub.com',
         uuid=None,
-        protocol_factory=None
+        pn_protocol=None
     ):
         super(PubnubTwisted, self).__init__(
             publish_key=publish_key,
@@ -2735,7 +2735,11 @@ class PubnubTwisted(PubnubCoreAsync):
         self.headers['User-Agent'] = ['Python-Twisted']
         self.headers['V'] = [self.version]
         self.pnsdk = 'PubNub-Python-' + 'Twisted' + '/' + self.version
-        self.protocol_factory = protocol_factory
+        self.pn_protocol = protocol_factory
+
+        if pn_protocol is None:
+            pn_protocol = PubNubResponse
+
 
     def _request(self, request, callback=None, error=None,
                  single=False, timeout=5, encoder_map=None):
@@ -2774,8 +2778,8 @@ class PubnubTwisted(PubnubCoreAsync):
             finished = Deferred()
             if response.code in [401, 403]:
                 response.deliverBody(PubNubPamResponse(finished))
-            else:
-                response.deliverBody(PubNubResponse(finished))
+            else
+                response.deliverBody(pn_protocol(finished))
 
             return finished
 
