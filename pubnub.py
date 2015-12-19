@@ -2685,7 +2685,6 @@ class Pubnub(PubnubCore):
 # Pubnub Twisted
 
 
-class Pubnub
 
 class PubnubTwisted(PubnubCoreAsync):
 
@@ -2735,7 +2734,7 @@ class PubnubTwisted(PubnubCoreAsync):
         self.headers['User-Agent'] = ['Python-Twisted']
         self.headers['V'] = [self.version]
         self.pnsdk = 'PubNub-Python-' + 'Twisted' + '/' + self.version
-        self.pn_protocol = protocol_factory
+        self.pn_protocol = pn_protocol
 
         if pn_protocol is None:
             pn_protocol = PubNubResponse
@@ -2776,9 +2775,9 @@ class PubnubTwisted(PubnubCoreAsync):
                 return
 
             finished = Deferred()
-            if response.code in [401, 403]:
+            if (response.code in [401, 403]) or ( pn_protocol is None):
                 response.deliverBody(PubNubPamResponse(finished))
-            else
+            else:
                 response.deliverBody(pn_protocol(finished))
 
             return finished
